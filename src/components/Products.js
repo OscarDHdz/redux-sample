@@ -1,6 +1,7 @@
 import React, { Fragment, useEffect } from 'react';
 import {useSelector, useDispatch} from 'react-redux';
-import { fetchProductsAction } from '../actions/productsActions';
+import { Link } from 'react-router-dom';
+import { deleteProductAction, fetchProductsAction } from '../actions/productsActions';
 
 const Products = () => {
 
@@ -14,6 +15,11 @@ const Products = () => {
     const loadProducts = () => dispatch(fetchProductsAction());
     loadProducts();
   }, []);
+
+  const deleteProductHandler = (product) => {
+    const deleteProduct = (product) => dispatch(deleteProductAction(product));
+    deleteProduct(product);
+  }
 
   return (
     <Fragment>
@@ -34,7 +40,15 @@ const Products = () => {
               <tr key={product.id}>
                 <td>{product.name}</td>
                 <td>{product.price}</td>
-                <td></td>
+                <td>
+                  <Link to={`/products/edit/${product.id}`} className="btn btn-primary mr-2">
+                    Edit
+                  </Link>
+                  <button type="button" className="btn btn-danger" onClick={() => deleteProductHandler(product)}>
+                    Delete
+                  </button>
+
+                </td>
               </tr>
             ))
           }

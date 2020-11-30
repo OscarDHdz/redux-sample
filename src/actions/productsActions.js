@@ -1,10 +1,11 @@
 import {
   ADD_PRODUCT, ADD_PRODUCT_SUCCESS, ADD_PRODUCT_ERROR,
-  PRODUCTS_FETCH, PRODUCTS_FETCH_SUCCESS, PRODUCTS_FETCH_ERROR
+  PRODUCTS_FETCH, PRODUCTS_FETCH_SUCCESS, PRODUCTS_FETCH_ERROR,
+  PRODUCTS_DELETE, PRODUCTS_DELETE_SUCCESS, PRODUCTS_DELETE_ERROR
 } from '../types';
 import axiosClient from '../config/axiosClient';
 
-// Products Fetch
+// Products Fetch ---------------------------------------------------
 export const fetchProductsAction = () => {
   return async (dispatch) => {
     dispatch(fetchProducts());
@@ -30,7 +31,7 @@ const fetchProductsError = (payload) => ({
 });
 
 
-// Create new products
+// Create new products ---------------------------------------------------
 export const createNewProductAction = (product) => {
   return async (dispatch) => {
 
@@ -58,3 +59,30 @@ const addProductError = payload => ({
   payload
 })
 
+// Delete product ----------------------------------------------------------
+export const deleteProductAction = product => {
+
+  return async (dispatch) => {
+    dispatch(deleteProduct(product))
+    try {
+      await axiosClient.delete(`/products/${product.id}`);
+      dispatch(deleteProductSuccess(product));
+    } catch (err) {
+      dispatch(deleteProductError(true));
+    }
+  }
+
+}
+
+const deleteProduct = payload => ({
+  type: PRODUCTS_DELETE,
+  payload
+})
+const deleteProductSuccess = payload => ({
+  type: PRODUCTS_DELETE_SUCCESS,
+  payload
+})
+const deleteProductError = payload => ({
+  type: PRODUCTS_DELETE_ERROR,
+  payload
+})
