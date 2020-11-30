@@ -1,5 +1,6 @@
 import {
-  ADD_PRODUCT, ADD_PRODUCT_SUCCESS, ADD_PRODUCT_ERROR
+  ADD_PRODUCT, ADD_PRODUCT_SUCCESS, ADD_PRODUCT_ERROR,
+  PRODUCTS_FETCH, PRODUCTS_FETCH_SUCCESS, PRODUCTS_FETCH_ERROR
 } from '../types';
 
 
@@ -26,6 +27,24 @@ const productsReducer = (state = initialState, action) => {
         products: [...state.products, action.payload]
       }
     case ADD_PRODUCT_ERROR:
+      return {
+        ...state,
+        loading: false,
+        error: action.payload
+      }
+    case PRODUCTS_FETCH:
+      return {
+        ...state,
+        loading: true,
+      };
+    case PRODUCTS_FETCH_SUCCESS:
+        return {
+          ...state,
+          loading: false,
+          error: false,
+          products: action.payload
+        }
+    case PRODUCTS_FETCH_ERROR:
       return {
         ...state,
         loading: false,
