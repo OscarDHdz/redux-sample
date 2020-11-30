@@ -5,16 +5,20 @@ import {useDispatch, useSelector} from 'react-redux';
 import { createNewProductAction } from '../actions/productsActions';
 
 
-const NewProduct = () => {
-
+const NewProduct = ({history}) => {
+  // Hooks
   const [name, setName] = useState('');
   const [price, setPrice] = useState('');
 
-
+  // Redux
   const dispatch = useDispatch();
   const addNewProduct = product => dispatch(createNewProductAction(product));
 
-  const submitNewProductHandler = e => {
+  // Access state
+  const loading = useSelector(state => state.products.loading);
+  const error = useSelector(state => state.products.error);
+
+  const submitNewProductHandler = async e => {
     e.preventDefault();
 
     // Validate Formm
@@ -25,9 +29,11 @@ const NewProduct = () => {
     // Check any other errors
 
     // Create new product
-    addNewProduct({
+    await addNewProduct({
       name, price
     });
+
+    history.push('/');
   }
 
   return (
@@ -77,6 +83,21 @@ const NewProduct = () => {
               </button>
 
             </form>
+
+            {
+              loading ? 
+              <p>
+                Loading...
+              </p>
+              : null
+            }
+            {
+              error ? 
+              <p className="alert alert-danger p2 mt-2">
+                Error!
+              </p>
+              : null
+            }
 
           </div>
 
