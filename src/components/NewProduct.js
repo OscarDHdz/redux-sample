@@ -4,11 +4,13 @@ import {useDispatch, useSelector} from 'react-redux';
 // Redux Actions
 import { createNewProductAction } from '../actions/productsActions';
 
+import useField from '../customHooks/useField';
+
 
 const NewProduct = ({history}) => {
   // Hooks
-  const [name, setName] = useState('');
-  const [price, setPrice] = useState('');
+  const [nameProps] = useField('');
+  const [priceProps] = useField('');
 
   // Redux
   const dispatch = useDispatch();
@@ -22,7 +24,7 @@ const NewProduct = ({history}) => {
     e.preventDefault();
 
     // Validate Formm
-    if (name.trim() === '' || price === '') {
+    if (nameProps.value.trim() === '' || priceProps.value === '') {
       return;
     }
 
@@ -30,7 +32,7 @@ const NewProduct = ({history}) => {
 
     // Create new product
     await addNewProduct({
-      name, price
+      name: nameProps.value, price: +priceProps.value
     });
 
     history.push('/');
@@ -52,11 +54,10 @@ const NewProduct = ({history}) => {
 
                 <label>Product Name</label>
                 <input
-                  type="test"
+                  type="text"
                   className="form-control"
                   placeholder="Product Name"
-                  value={name}
-                  onChange={e => setName(e.target.value)}
+                  {...nameProps}
                 />
 
               </div>
@@ -65,11 +66,10 @@ const NewProduct = ({history}) => {
 
                 <label>Product Price</label>
                 <input
-                  type="number"
+                  type="text"
                   className="form-control"
                   placeholder="$00.00"
-                  value={price}
-                  onChange={e => setPrice(+e.target.value)}
+                  {...priceProps}
                 />
 
               </div>
