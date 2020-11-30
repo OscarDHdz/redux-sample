@@ -1,7 +1,8 @@
 import {
   ADD_PRODUCT, ADD_PRODUCT_SUCCESS, ADD_PRODUCT_ERROR,
   PRODUCTS_FETCH, PRODUCTS_FETCH_SUCCESS, PRODUCTS_FETCH_ERROR,
-  PRODUCTS_DELETE, PRODUCTS_DELETE_SUCCESS, PRODUCTS_DELETE_ERROR
+  PRODUCTS_DELETE, PRODUCTS_DELETE_SUCCESS, PRODUCTS_DELETE_ERROR,
+  PRODUCTS_SET_EDIT, PRODUCTS_EDIT, PRODUCTS_EDIT_SUCCESS, PRODUCTS_EDIT_ERROR
 } from '../types';
 import axiosClient from '../config/axiosClient';
 
@@ -84,5 +85,41 @@ const deleteProductSuccess = payload => ({
 })
 const deleteProductError = payload => ({
   type: PRODUCTS_DELETE_ERROR,
+  payload
+})
+
+// Edit product -----------------------------------------------
+export const setProductToEditAction = (productData) => {
+  return async dispatch => {
+    dispatch(setProductToEdit(productData));
+  }
+}
+
+export const editProductAction = (id, productData) => {
+  return async dispatch => {
+    dispatch(editProduct());
+    try {
+      const response = await axiosClient.put(`/products/${id}`, productData);
+      dispatch(editProductSuccess(response.data));
+    } catch (err) {
+      dispatch(editProductError(true));
+    }
+  }
+}
+
+const setProductToEdit = payload => ({
+  type: PRODUCTS_SET_EDIT,
+  payload
+})
+const editProduct = payload => ({
+  type: PRODUCTS_EDIT,
+  payload
+})
+const editProductSuccess = payload => ({
+  type: PRODUCTS_EDIT_SUCCESS,
+  payload
+})
+const editProductError = payload => ({
+  type: PRODUCTS_EDIT_ERROR,
   payload
 })

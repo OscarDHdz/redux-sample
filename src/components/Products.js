@@ -1,11 +1,12 @@
 import React, { Fragment, useEffect } from 'react';
 import {useSelector, useDispatch} from 'react-redux';
-import { Link } from 'react-router-dom';
-import { deleteProductAction, fetchProductsAction } from '../actions/productsActions';
+import { Link, useHistory } from 'react-router-dom';
+import { deleteProductAction, setProductToEditAction, fetchProductsAction } from '../actions/productsActions';
 
 const Products = () => {
 
   const dispatch = useDispatch();
+  const history = useHistory();
 
   const products = useSelector(state => state.products.products);
   const error = useSelector(state => state.products.error);
@@ -19,6 +20,12 @@ const Products = () => {
   const deleteProductHandler = (product) => {
     const deleteProduct = (product) => dispatch(deleteProductAction(product));
     deleteProduct(product);
+  }
+
+  const redirectToEditPage = (product) => {
+    const setProductToEdit = (product) => dispatch(setProductToEditAction(product));
+    setProductToEdit(product);
+    history.push(`/products/edit/${product.id}`);
   }
 
   return (
@@ -41,9 +48,9 @@ const Products = () => {
                 <td>{product.name}</td>
                 <td>{product.price}</td>
                 <td>
-                  <Link to={`/products/edit/${product.id}`} className="btn btn-primary mr-2">
+                  <button onClick={() => redirectToEditPage(product)} className="btn btn-primary mr-2">
                     Edit
-                  </Link>
+                  </button>
                   <button type="button" className="btn btn-danger" onClick={() => deleteProductHandler(product)}>
                     Delete
                   </button>
